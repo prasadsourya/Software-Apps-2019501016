@@ -29,4 +29,3 @@ used SCSS variable in one stylesheet
 used Scc nesting and inheritance in Project0.scss
 I have written my README.md also
 THANK YOU
-
