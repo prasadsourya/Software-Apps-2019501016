@@ -1,0 +1,22 @@
+h1 {
+    text-align: center;
+}
+a::before {
+    content:"\21d2";
+}
+@media (min-width:800px) {
+    body{
+        background-color:lightgray;
+    }
+}
+@media (max-width:799px) {
+    body {
+        background-color:lightblue;
+    }
+}
+%message {
+    text-align: center;
+}
+.col-sm-4 {
+    @extend %message;
+}
