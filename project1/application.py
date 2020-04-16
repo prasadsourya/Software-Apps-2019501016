@@ -27,10 +27,10 @@ def index():
 
 @app.route("/register",methods =["GET","POST"])
 def register():
-    var=request.form.get("email")
-    print(var)
-    var1=request.form.get("psw")
-    print(var1)
     if request.method=="POST" :
+        var=request.form.get("email")
+        print(var)
+        var1=request.form.get("psw")
+        print(var1)
         return render_template("gmails.html", gmails=var)
     return render_template("register.html")
