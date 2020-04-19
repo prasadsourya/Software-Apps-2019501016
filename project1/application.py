@@ -29,6 +29,8 @@ db.init_app(app)
 def index():
     return render_template("index.html")
 
+
+
 @app.route("/register",methods =["GET","POST"])
 def register():
     if request.method=="POST" :
@@ -51,8 +53,8 @@ def register():
 
 @app.route("/admin")
 def admin():
-    user1=User.query.all()
-    return render_template("userslist.html",name=user1)
+    users=User.query.all()
+    return render_template("userslist.html",name=users)
 
 
 def main():
