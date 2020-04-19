@@ -36,8 +36,6 @@ def register():
         var1=request.form.get("psw")
         timestamp=datetime.datetime.now()
         user = User(email=var,password=var1,timestamp=timestamp)
-        db.session.add(user)
-        db.session.commit()
         if not var:
             text = "Enter email address"
             return render_template("gmails.html",gmails=text,msg="ERROR")
@@ -45,14 +43,16 @@ def register():
             text = "Enter password"
             return render_template("gmails.html", gmails=text,msg ="ERROR")
         else:
+            db.session.add(user)
+            db.session.commit()
             return render_template("gmails.html",msg="SUCCESS")
     return render_template("register.html")
 
 
 @app.route("/admin")
 def admin():
-    user1=User.query.all()
-    return render_template("userslist.html",name=user1)
+    users=User.query.all()
+    return render_template("userslist.html",name=users)
 
 
 def main():
