@@ -1,9 +1,10 @@
 import os
 
-from flask import Flask, session, render_template,request
+from flask import Flask, session,render_template,request
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
+from models import *
 
 app = Flask(__name__)
 
@@ -17,8 +18,11 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 # Set up database
-engine = create_engine(os.getenv("DATABASE_URL"))
-db = scoped_session(sessionmaker(bind=engine))
+#engine = create_engine(os.getenv("DATABASE_URL"))
+#db = scoped_session(sessionmaker(bind=engine))
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
+db.init_app(app)
 
 
 @app.route("/")
@@ -34,3 +38,12 @@ def register():
         print(var1)
         return render_template("gmails.html", gmails=var)
     return render_template("register.html")
+
+
+def main():
+    app.app_context().push()
+    db.create_all()
+
+
+if __name__ == "__main__":
+    main()
