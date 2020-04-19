@@ -49,6 +49,12 @@ def register():
     return render_template("register.html")
 
 
+@app.route("/admin")
+def admin():
+    user1=User.query.all()
+    return render_template("userslist.html",name=user1)
+
+
 def main():
     app.app_context().push()
     db.create_all()
