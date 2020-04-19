@@ -1,5 +1,5 @@
 import os
-
+import datetime
 from flask import Flask, session,render_template,request
 from flask_session import Session
 from sqlalchemy import create_engine
@@ -33,10 +33,19 @@ def index():
 def register():
     if request.method=="POST" :
         var=request.form.get("email")
-        print(var)
         var1=request.form.get("psw")
-        print(var1)
-        return render_template("gmails.html", gmails=var)
+        timestamp=datetime.datetime.now()
+        user = User(email=var,password=var1,timestamp=timestamp)
+        db.session.add(user)
+        db.session.commit()
+        if not var:
+            text = "Enter email address"
+            return render_template("gmails.html",gmails=text,msg="ERROR")
+        elif not var1:
+            text = "Enter password"
+            return render_template("gmails.html", gmails=text,msg ="ERROR")
+        else:
+            return render_template("gmails.html",msg="SUCCESS")
     return render_template("register.html")
 
 
