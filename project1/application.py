@@ -1,6 +1,6 @@
 import os
 import datetime
-from flask import Flask, session,render_template,request
+from flask import Flask, session,render_template,request,redirect,url_for
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -35,7 +35,10 @@ def register():
         var=request.form.get("email")
         var1=request.form.get("psw")
         timestamp=datetime.datetime.now()
-        user = User(email=var,password=var1,timestamp=timestamp)
+        users1= User.query.all()
+        for user in users1:
+            if var==user.email:
+                return "<h2 Style='color: red;text-align:center'>You already have registered !Please Login </h2>"       
         if not var:
             text = "Enter email address"
             return render_template("gmails.html",gmails=text,msg="ERROR")
@@ -43,17 +46,43 @@ def register():
             text = "Enter password"
             return render_template("gmails.html", gmails=text,msg ="ERROR")
         else:
+            user = User(email=var,password=var1,timestamp=timestamp)
             db.session.add(user)
             db.session.commit()
             return render_template("gmails.html",msg="SUCCESS")
-    return render_template("register.html")
+    return render_template("register.html",flag=True)
 
 
 @app.route("/admin")
 def admin():
-    users=User.query.all()
-    return render_template("userslist.html",name=users)
+    users2=User.query.all()
+    return render_template("userslist.html",name=users2)
 
+@app.route("/auth",methods=["GET","POST"])
+def userhome():
+    if (request.method=="POST"):
+        var=request.form.get("email")
+        var1=request.form.get("psw")
+        users3= User.query.all()
+        for user in users3:
+            if user.email==var:
+                if user.password==var1:
+                    session["var"]=user.email
+                    return redirect(url_for('user'))
+        return render_template("register.html",flag=False)
+    if (request.method=="GET"):
+        return redirect(url_for('register'))
+
+@app.route("/logout")
+def sessiontimeout():
+    session.pop("var",None)
+    return redirect(url_for('register'))
+
+@app.route("/user")
+def user():
+    if session.get("var") is not None:
+        return render_template("user.html")
+    return redirect(url_for('register'))
 
 def main():
     app.app_context().push()

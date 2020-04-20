@@ -47,7 +47,7 @@ hr {
   margin: 8px 0;
   border: none;
   cursor: pointer;
-  width: 100%;
+  width: 49%;
   opacity: 0.9;
 }
 
@@ -71,6 +71,9 @@ a {
 
 <form action="/register" method ="POST">
   <div class="container">
+    {% if not flag %}
+    <h3>Invalid email or password</h3>
+    {% endif%}
     <h1>Register</h1>
     <p>Please fill in this form to create an account.</p>
     <hr>
@@ -83,6 +86,7 @@ a {
 
     <hr>
     <button type="submit" class="registerbtn">Register</button>
+    <button type="submit" class="registerbtn" formaction="{{url_for('userhome')}}">Login</button>       
   </div>
 </form>
 
